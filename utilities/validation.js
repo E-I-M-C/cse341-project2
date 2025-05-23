@@ -14,8 +14,8 @@ const contactRules = () => {
 
 const userRules = () => {
   return [
-    body('username').isEmail(),
-    body('password').isLength({ min: 5 }),
+    body('username').isEmail().notEmpty(),
+    body('password').isLength({ min: 5 }).notEmpty(),
   ];
 }
 
