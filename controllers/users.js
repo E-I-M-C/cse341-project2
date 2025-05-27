@@ -18,7 +18,7 @@ const getSingle = async (req, res) => {
 //#swagger.tags=['User'];
   try {
     const userId = new ObjectId(req.params.id);
-    const result = await mongodb.getDb().db().collection('more').find({ _id: userId });
+    const result = await mongodb.getDb().db().collection('users').find({ _id: userId });
     result.toArray().then((user) => {
       res.setHeader('Content-Type', 'application/json');
       res.status(200).json(user[0]);
@@ -35,11 +35,15 @@ const createUser = async (req, res) => {
     username: req.body.username,
     password: req.body.password
   };
-  const response = await mongodb.getDb().db().collection('users').insertOne(user);
-  if (response.acknowledged > 0) {
-    res.status(204).send();
-  } else {
-    res.status(500).json(response.error || 'Some error occurred while creating the user');
+  try {
+    const response = await mongodb.getDb().db().collection('users').insertOne(user);
+    if (response.acknowledged > 0) {
+      res.status(204).send();
+    } else {
+      res.status(500).json(response.error || 'Some error occurred while creating the user');
+    }
+  } catch (err) {
+    res.status(400).json({ message: err });
   }
 }
 
@@ -50,22 +54,30 @@ const updateUser = async (req, res) => {
     username: req.body.username,
     password: req.body.password
   };
-  const response = await mongodb.getDb().db().collection('users').replaceOne({ _id: userId }, user);
-  if (response.modifiedCount > 0) {
-    res.status(204).send();
-  } else {
-    res.status(500).json(response.error || 'Some error occurred while updating the user');
+  try {
+    const response = await mongodb.getDb().db().collection('users').replaceOne({ _id: userId }, user);
+    if (response.modifiedCount > 0) {
+      res.status(204).send();
+    } else {
+      res.status(500).json(response.error || 'Some error occurred while updating the user');
+    }
+  } catch (err) {
+    res.status(400).json({ message: err });
   }
 }
 
 const deleteUser = async (req, res) => {
 //#swagger.tags=['User'];
   const userId = new ObjectId(req.params.id);
-  const response = await mongodb.getDb().db().collection('users').deleteOne({ _id: userId });
-  if (response.deletedCount > 0) {
-    res.status(204).send();
-  } else {
-    res.status(500).json(response.error || 'Some error occurred while deleting the user');
+  try {
+    const response = await mongodb.getDb().db().collection('users').deleteOne({ _id: userId });
+    if (response.deletedCount > 0) {
+      res.status(204).send();
+    } else {
+      res.status(500).json(response.error || 'Some error occurred while deleting the user');
+    }
+  } catch (err) {
+    res.status(400).json({ message: err });
   }
 }
 
