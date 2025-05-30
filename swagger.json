@@ -24,6 +24,26 @@
         }
       }
     },
+    "/profile": {
+      "get": {
+        "tags": [
+          "Authentication"
+        ],
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "OAuth2": [
+              "read"
+            ]
+          }
+        ]
+      }
+    },
     "/contacts/": {
       "get": {
         "tags": [
@@ -40,7 +60,14 @@
           "400": {
             "description": "Bad Request"
           }
-        }
+        },
+        "security": [
+          {
+            "OAuth2": [
+              "read_contacts"
+            ]
+          }
+        ]
       },
       "post": {
         "tags": [
@@ -92,7 +119,14 @@
           "500": {
             "description": "Internal Server Error"
           }
-        }
+        },
+        "security": [
+          {
+            "OAuth2": [
+              "write_contacts"
+            ]
+          }
+        ]
       }
     },
     "/contacts/{id}": {
@@ -119,7 +153,14 @@
           "400": {
             "description": "Bad Request"
           }
-        }
+        },
+        "security": [
+          {
+            "OAuth2": [
+              "read_contacts"
+            ]
+          }
+        ]
       },
       "put": {
         "tags": [
@@ -177,7 +218,14 @@
           "500": {
             "description": "Internal Server Error"
           }
-        }
+        },
+        "security": [
+          {
+            "OAuth2": [
+              "write_contacts"
+            ]
+          }
+        ]
       },
       "delete": {
         "tags": [
@@ -202,7 +250,14 @@
           "500": {
             "description": "Internal Server Error"
           }
-        }
+        },
+        "security": [
+          {
+            "OAuth2": [
+              "write_contacts"
+            ]
+          }
+        ]
       }
     },
     "/users/": {
@@ -221,7 +276,14 @@
           "400": {
             "description": "Bad Request"
           }
-        }
+        },
+        "security": [
+          {
+            "OAuth2": [
+              "read_users"
+            ]
+          }
+        ]
       },
       "post": {
         "tags": [
@@ -235,10 +297,10 @@
             "schema": {
               "type": "object",
               "properties": {
-                "username": {
+                "password": {
                   "example": "any"
                 },
-                "password": {
+                "username": {
                   "example": "any"
                 }
               }
@@ -258,7 +320,14 @@
           "500": {
             "description": "Internal Server Error"
           }
-        }
+        },
+        "security": [
+          {
+            "OAuth2": [
+              "write_users"
+            ]
+          }
+        ]
       }
     },
     "/users/{id}": {
@@ -285,7 +354,14 @@
           "400": {
             "description": "Bad Request"
           }
-        }
+        },
+        "security": [
+          {
+            "OAuth2": [
+              "read_users"
+            ]
+          }
+        ]
       },
       "put": {
         "tags": [
@@ -328,7 +404,14 @@
           "500": {
             "description": "Internal Server Error"
           }
-        }
+        },
+        "security": [
+          {
+            "OAuth2": [
+              "write_users"
+            ]
+          }
+        ]
       },
       "delete": {
         "tags": [
@@ -352,6 +435,32 @@
           },
           "500": {
             "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "OAuth2": [
+              "write_users"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "OAuth2": {
+        "type": "oauth2",
+        "flows": {
+          "authorizationCode": {
+            "authorizationUrl": "localhost:3000/login",
+            "scopes": {
+              "read_contants": "Allows read access to contacts",
+              "write_contacts": "Allows write access to contacts",
+              "read_users": "Allows read access to users",
+              "write_users": "Allows write access to users",
+              "admin": "Grants access to admin operations"
+            }
           }
         }
       }

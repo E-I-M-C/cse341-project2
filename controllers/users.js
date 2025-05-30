@@ -1,8 +1,14 @@
 const mongodb = require('../data/database');
 const ObjectId = require('mongodb').ObjectId;
+const bcrypt = require("bcryptjs");
 
 const getAll = async (req, res) => {
 //#swagger.tags=['User'];
+/* #swagger.security = [{
+  "OAuth2": [
+    'read_users'
+  ]
+}] */
   try {
     const result = await mongodb.getDb().db().collection('users').find();
     result.toArray().then((user) => {
@@ -16,6 +22,11 @@ const getAll = async (req, res) => {
 
 const getSingle = async (req, res) => {
 //#swagger.tags=['User'];
+/* #swagger.security = [{
+  "OAuth2": [
+    'read_users'
+  ]
+}] */
   try {
     const userId = new ObjectId(req.params.id);
     const result = await mongodb.getDb().db().collection('users').find({ _id: userId });
@@ -31,9 +42,21 @@ const getSingle = async (req, res) => {
 
 const createUser = async (req, res) => {
 //#swagger.tags=['User'];
+/* #swagger.security = [{
+  "OAuth2": [
+    'write_users'
+  ]
+}] */
+  let hashedPassword
+  try {
+    hashedPassword = bcrypt.hashSync(req.body.password, 10);
+  } catch (err) {
+    res.status(500).json({ message: err });
+  }
+
   const user = {
     username: req.body.username,
-    password: req.body.password
+    password: hashedPassword
   };
   try {
     const response = await mongodb.getDb().db().collection('users').insertOne(user);
@@ -49,6 +72,11 @@ const createUser = async (req, res) => {
 
 const updateUser = async (req, res) => {
 //#swagger.tags=['User'];
+/* #swagger.security = [{
+  "OAuth2": [
+    'write_users'
+  ]
+}] */
   const userId = new ObjectId(req.params.id);
   const user = {
     username: req.body.username,
@@ -68,6 +96,11 @@ const updateUser = async (req, res) => {
 
 const deleteUser = async (req, res) => {
 //#swagger.tags=['User'];
+/* #swagger.security = [{
+  "OAuth2": [
+    'write_users'
+  ]
+}] */
   const userId = new ObjectId(req.params.id);
   try {
     const response = await mongodb.getDb().db().collection('users').deleteOne({ _id: userId });

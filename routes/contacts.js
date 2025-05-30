@@ -2,9 +2,15 @@ const router = require('express').Router();
 const contactCont = require('../controllers/contacts');
 const contactValidate = require('../utilities/validation');
 
-router.get('/', contactCont.getAll);
+router.get(
+  '/',
+  contactCont.getAll
+);
 
-router.get('/:id', contactCont.getSingle);
+router.get(
+  '/:id',
+  contactCont.getSingle
+);
 
 router.post(
   '/',
@@ -20,6 +26,9 @@ router.put(
   contactCont.updateContact
 );
 
-router.delete('/:id', contactCont.deleteContact);
+router.delete(
+  '/:id',
+  contactCont.deleteContact
+);
 
 module.exports = router;

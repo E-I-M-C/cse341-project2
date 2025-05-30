@@ -3,6 +3,11 @@ const ObjectId = require('mongodb').ObjectId;
 
 const getAll = async (req, res) => {
 //#swagger.tags=['Contact'];
+/* #swagger.security = [{
+  "OAuth2": [
+    'read_contacts'
+  ]
+}] */
   try {
     const result = await mongodb.getDb().db().collection('contacts').find();
     result.toArray().then((contacts) => {
@@ -16,6 +21,11 @@ const getAll = async (req, res) => {
 
 const getSingle = async (req, res) => {
 //#swagger.tags=['Contact'];
+/* #swagger.security = [{
+  "OAuth2": [
+    'read_contacts'
+  ]
+}] */
   try {
     const contactId = new ObjectId(req.params.id);
     const result = await mongodb.getDb().db().collection('contacts').find({ _id: contactId });
@@ -30,6 +40,11 @@ const getSingle = async (req, res) => {
 
 const createContact = async (req, res) => {
 //#swagger.tags=['Contact'];
+/* #swagger.security = [{
+  "OAuth2": [
+    'write_contacts'
+  ]
+}] */
   const contact = {
     firstName: req.body.firstName,
     lastName: req.body.lastName,
@@ -53,6 +68,11 @@ const createContact = async (req, res) => {
 
 const updateContact = async (req, res) => {
 //#swagger.tags=['Contact'];
+/* #swagger.security = [{
+  "OAuth2": [
+    'write_contacts'
+  ]
+}] */
   const contactId = new ObjectId(req.params.id);
   const contact = {
     firstName: req.body.firstName,
@@ -77,6 +97,11 @@ const updateContact = async (req, res) => {
 
 const deleteContact = async (req, res) => {
 //#swagger.tags=['Contact'];
+/* #swagger.security = [{
+  "OAuth2": [
+    'write_contacts'
+  ]
+}] */
   const contactId = new ObjectId(req.params.id);
   try {
     const response = await mongodb.getDb().db().collection('contacts').deleteOne({ _id: contactId });
