@@ -53,12 +53,12 @@ const createUser = async (req, res) => {
   } catch (err) {
     res.status(500).json({ message: err });
   }
-
-  const user = {
-    username: req.body.username,
-    password: hashedPassword
-  };
+  
   try {
+    const user = {
+      username: req.body.username,
+      password: hashedPassword
+    };
     const response = await mongodb.getDb().db().collection('users').insertOne(user);
     if (response.acknowledged > 0) {
       res.status(204).send();
@@ -77,12 +77,19 @@ const updateUser = async (req, res) => {
     'write_users'
   ]
 }] */
-  const userId = new ObjectId(req.params.id);
-  const user = {
-    username: req.body.username,
-    password: req.body.password
-  };
+  let hashedPassword
   try {
+    hashedPassword = bcrypt.hashSync(req.body.password, 10);
+  } catch (err) {
+    res.status(500).json({ message: err });
+  }
+
+  const userId = new ObjectId(req.params.id);
+  try {
+    const user = {
+      username: req.body.username,
+      password: hashedPassword
+    };
     const response = await mongodb.getDb().db().collection('users').replaceOne({ _id: userId }, user);
     if (response.modifiedCount > 0) {
       res.status(204).send();

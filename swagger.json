@@ -381,10 +381,10 @@
             "schema": {
               "type": "object",
               "properties": {
-                "username": {
+                "password": {
                   "example": "any"
                 },
-                "password": {
+                "username": {
                   "example": "any"
                 }
               }
